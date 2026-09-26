@@ -1,82 +1,265 @@
-# Pulse · BMI & movement, version 2
+# Pulse · BMI & Movement Tracker (Flutter)
 
-A Flutter upgrade of [arshiadp/Bmi_calculator](https://github.com/arshiadp/Bmi_calculator), with Riverpod 3, an ink/mint/lavender visual system, guided measurement entry and a local progress journal.
+A modern Flutter health and fitness tracking application focused on helping users understand their body metrics, create realistic movement goals, and track personal progress over time.
 
-![Desktop overview with illustrative test data](docs/previews/05-desktop-demo.png)
+Pulse is a complete redesign and upgrade of the original BMI Calculator project:
+https://github.com/arshiadp/Bmi_calculator
 
-## Run
+The application uses a modern dark interface with an ink/mint/lavender visual system, guided measurement onboarding, personalized weekly planning, and a local health progress journal.
 
-Validated with **Flutter 3.47.5 / Dart 3.13.4**. Use the pinned stable version for reproducibility.
+<p align="center">
+  <img src="docs/previews/05-desktop-demo.png" width="900"/>
+</p>
 
-```sh
+## App Preview
+
+### Guided Health Setup
+
+The application provides a simple onboarding experience where users enter their measurements and create a personalized activity routine.
+
+<p align="center">
+  <img src="docs/previews/01-height.png" width="260"/>
+  <img src="docs/previews/02-weight.png" width="260"/>
+  <img src="docs/previews/03-plan.png" width="260"/>
+</p>
+
+---
+
+### Health Dashboard
+
+The overview dashboard gives users a complete picture of their current health information:
+
+- BMI calculation and category
+- Current measurements
+- Weekly activity target
+- Quick check-in actions
+- Personalized health overview
+
+<p align="center">
+  <img src="docs/previews/05-desktop-demo.png" width="900"/>
+</p>
+
+---
+
+### Progress Tracking
+
+Users can save daily measurements and review their journey through a local progress journal.
+
+Features:
+
+- Weight history tracking
+- Measurement timeline
+- Check-in management
+- CSV export
+- Individual record deletion
+- Complete data reset
+
+<p align="center">
+  <img src="docs/previews/06-progress.png" width="900"/>
+</p>
+
+---
+
+### Health Insights
+
+The application provides educational information about BMI, including its limitations and proper interpretation.
+
+The goal is to help users understand their measurements instead of focusing only on numbers.
+
+<p align="center">
+  <img src="docs/previews/07-insights.png" width="900"/>
+</p>
+
+
+# Run
+
+Validated with:
+
+**Flutter 3.47.5 / Dart 3.13.4**
+
+Use the pinned stable version for reproducible results.
+
+```bash
 flutter pub get
 flutter run
-# Or in a browser:
+```
+
+Run on browser:
+
+```bash
 flutter run -d chrome
 ```
 
-```sh
+Quality checks:
+
+```bash
 flutter analyze
 flutter test
 flutter build web --release
-# Android, with the Android SDK installed:
+```
+
+Android:
+
+```bash
 flutter build apk --debug
-# iOS, on macOS with Xcode and CocoaPods:
+```
+
+iOS:
+
+```bash
 flutter build ios --no-codesign
 ```
 
-Android/iOS builds have not been run in the delivery environment. Android application ID and release signing are inherited from the original project (`com.example.bmi_calculator`, debug signing in the release block); configure your own ID and signing before publishing. The platform deployment floors are iOS 13 and macOS 10.15 to match the persistence plugin. No hosted deployment or GitHub push is included.
+Android and iOS builds require their own platform environments, SDK configuration, application identifiers, and signing setup before production deployment.
 
-## What changed
 
-- Three-step height, weight and weekly-plan flow inspired by the supplied reference.
-- Ink background, slate cards, mint actions, lavender accents, bundled Roboto fonts.
-- Metric and imperial units, fine sliders and validated typed entry.
-- Adult BMI calculation with correct 18.5/25/30/35/40 boundaries. Category uses the unrounded value.
-- Locally saved daily check-ins; another save on the same day updates that day.
-- Date-scaled weight chart, history, individual deletion, copy-to-clipboard CSV and complete data reset.
-- Weekly activity days/minutes, selectable week start, and an evenly spaced suggested schedule.
-- Phone bottom navigation, desktop navigation rail and two-column overview.
-- Loading, storage failure and corrupt-data recovery states; saves publish state only after storage succeeds.
-- CDC/WHO context and source URLs, no calorie prescriptions or fabricated progress.
-- GitHub Actions for formatting, analysis, tests and web compilation.
+# Main Features
 
-Measurements are constrained to 100–230 cm and 30–250 kg as product input limits, not medical thresholds. The adult categories require confirmation of age 20+. BMI is a screening measure, not a diagnosis, and is not suitable for assessing pregnancy or children with these categories.
+## Personal Health Measurements
 
-## Architecture
+- Height and weight tracking
+- Metric and imperial unit support
+- BMI calculation
+- Validated user input
+- Interactive sliders and typed values
+
+
+## Progress Journal
+
+- Local daily check-ins
+- Automatic same-day updates
+- Historical records
+- Weight trend visualization
+- CSV data export
+
+
+## Weekly Activity Planner
+
+Users can create realistic movement goals:
+
+- Active days per week
+- Minutes per session
+- Week starting day selection
+- Suggested weekly schedule
+
+
+## Responsive Experience
+
+The application supports different layouts:
+
+- Mobile bottom navigation
+- Desktop navigation rail
+- Two-column dashboard layout
+- Responsive Flutter widgets
+
+
+## Privacy Focused
+
+Pulse does not require:
+
+- User accounts
+- Analytics tracking
+- Backend services
+
+All information is stored locally on the user's device.
+
+Storage:
+
+```
+pulse.health.v1
+```
+
+Shared Preferences is used for lightweight local persistence.
+
+
+# Architecture
 
 | Path | Responsibility |
 | --- | --- |
-| `lib/core` | Theme tokens and component styles |
-| `lib/features/health/domain` | Pure Dart models, calculation, units, repository contract |
-| `lib/features/health/data` | Versioned JSON storage through SharedPreferencesAsync |
-| `lib/features/health/application` | Riverpod dependency injection, hydration and serialized persistence commands |
-| `lib/features/health/presentation` | Onboarding, overview, history, plan, insights and shared widgets |
-| `test` | Domain boundaries, controller behavior and responsive interaction tests |
-| `tool/render_previews.dart` | Reproducible screenshots of actual Flutter widgets |
+| `lib/core` | Theme system, reusable components and design tokens |
+| `lib/features/health/domain` | Models, calculations, units and business logic |
+| `lib/features/health/data` | Local JSON persistence layer |
+| `lib/features/health/application` | Riverpod state management and dependency injection |
+| `lib/features/health/presentation` | Screens, widgets and user interactions |
+| `test` | Unit and widget testing |
+| `tool/render_previews.dart` | Screenshot generation tools |
 
-The repository can be replaced without changing the UI. Immutable state flows from AsyncNotifier to consumers. Temporary form drafts, selected tabs and dialog state stay local to their widgets. Plain Navigator handles the single edit route; a router/code-generation layer would add little value at this size.
 
-### Storage and privacy
+# Technical Stack
 
-No account, analytics or backend is used. Data is saved in `pulse.health.v1`. Shared preferences is simple, unencrypted storage, not a clinical record or durable database; OS/browser backup behavior applies. On web, clearing site data removes the journal. Calculations require no network once the app is loaded; this is not an offline-installable PWA guarantee. Copy CSV before clearing data. Plan edits currently share the check-in flow and save today's measurement too.
+- Flutter
+- Dart
+- Riverpod 3
+- SharedPreferencesAsync
+- Material Design principles
+- Responsive UI architecture
+- Local JSON data storage
 
-### Research and scope
 
-See [research decisions and primary sources](docs/RESEARCH.md). Deferred features include backdated entry editing, custom training weekdays, reminders, encrypted storage, RTL localization, platform file sharing and wearable import. None is claimed as working in this version.
+# Design System
 
-## Verification
+The interface follows a modern product design approach:
 
-- `flutter analyze`: no issues.
-- `flutter test`: 13 passing tests.
-- `flutter build web --release`: successful.
-- Actual Flutter screenshots rendered and visually reviewed; onboarding, desktop overview and navigation tested at 320, 390 and 1200 pixels, plus larger text on a small phone.
-- Native installation, real-device accessibility, browser interaction and app-store release signing still need platform testing.
+- Dark premium UI
+- Ink background
+- Slate surfaces
+- Mint primary actions
+- Lavender highlights
+- Custom typography hierarchy
+- Rounded cards
+- Minimal interaction design
 
-To regenerate the preview images:
 
-```sh
+# Research & Scope
+
+The application follows health information guidelines and avoids presenting BMI as a medical diagnosis.
+
+BMI is used only as a general screening measurement and should not replace professional health assessment.
+
+Additional research decisions and references:
+
+```
+docs/RESEARCH.md
+```
+
+Future improvements:
+
+- Backdated entry editing
+- Custom training schedules
+- Reminders
+- Encrypted storage
+- RTL localization
+- Wearable device integration
+
+
+# Verification
+
+Completed:
+
+✅ Flutter analyze  
+✅ Flutter tests  
+✅ Web release build  
+✅ Responsive UI testing  
+✅ Preview rendering from Flutter widgets  
+
+
+Test coverage includes:
+
+- Domain calculations
+- State management behavior
+- Storage handling
+- Responsive interactions
+
+
+Generate preview images:
+
+```bash
 flutter test tool/render_previews.dart
 ```
 
-Preview charts use explicitly isolated, illustrative test fixtures. The installed app starts without seeded history. Font license: `assets/fonts/Roboto_LICENSE.txt`.
+
+# Project Author
+
+Created and developed by **Arshia**
+
+Flutter Developer focused on building modern, scalable, and user-centered applications.
