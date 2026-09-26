@@ -1,21 +1,28 @@
-# Pulse · BMI & Movement Tracker (Flutter)
+# Pulse · BMI & movement, version 2
 
-A modern Flutter health and fitness tracking application focused on helping users understand their body metrics, create realistic movement goals, and track personal progress over time.
+A modern Flutter health and movement tracking application focused on helping users understand their body measurements, create realistic activity goals, and track personal progress over time.
 
-Pulse is a complete redesign and upgrade of the original BMI Calculator project:
+A Flutter upgrade of the original BMI Calculator project:
 https://github.com/arshiadp/Bmi_calculator
 
-The application uses a modern dark interface with an ink/mint/lavender visual system, guided measurement onboarding, personalized weekly planning, and a local health progress journal.
+Pulse introduces a complete redesign with a modern ink/mint/lavender visual system, guided measurement onboarding, local progress journaling, responsive layouts, and a privacy-focused local storage approach.
 
-<p align="center">
-  <img src="docs/previews/05-desktop-demo.png" width="900"/>
-</p>
+![Desktop overview with illustrative test data](docs/previews/05-desktop-demo.png)
 
-## App Preview
+---
 
-### Guided Health Setup
+# App Preview
 
-The application provides a simple onboarding experience where users enter their measurements and create a personalized activity routine.
+## Guided Measurement Setup
+
+Pulse provides a simple step-by-step onboarding flow where users enter their measurements and create a personalized weekly movement routine.
+
+The onboarding includes:
+
+- Height selection
+- Weight input
+- Automatic BMI calculation
+- Weekly activity planning
 
 <p align="center">
   <img src="docs/previews/01-height.png" width="260"/>
@@ -23,53 +30,34 @@ The application provides a simple onboarding experience where users enter their 
   <img src="docs/previews/03-plan.png" width="260"/>
 </p>
 
----
 
-### Health Dashboard
+## Health Dashboard
 
-The overview dashboard gives users a complete picture of their current health information:
+The main overview screen provides a complete summary of the user's current health information:
 
-- BMI calculation and category
 - Current measurements
-- Weekly activity target
+- BMI result and category
+- Weekly movement target
 - Quick check-in actions
-- Personalized health overview
+- Personalized overview
+
+
+<p align="center">
+  <img src="docs/previews/04-overview.png" width="900"/>
+</p>
+
+
+## Desktop Experience
+
+Pulse includes a responsive desktop layout with navigation rail, adaptive content sections, and a two-column dashboard experience.
+
 
 <p align="center">
   <img src="docs/previews/05-desktop-demo.png" width="900"/>
 </p>
 
----
-
-### Progress Tracking
-
-Users can save daily measurements and review their journey through a local progress journal.
-
-Features:
-
-- Weight history tracking
-- Measurement timeline
-- Check-in management
-- CSV export
-- Individual record deletion
-- Complete data reset
-
-<p align="center">
-  <img src="docs/previews/06-progress.png" width="900"/>
-</p>
 
 ---
-
-### Health Insights
-
-The application provides educational information about BMI, including its limitations and proper interpretation.
-
-The goal is to help users understand their measurements instead of focusing only on numbers.
-
-<p align="center">
-  <img src="docs/previews/07-insights.png" width="900"/>
-</p>
-
 
 # Run
 
@@ -77,22 +65,22 @@ Validated with:
 
 **Flutter 3.47.5 / Dart 3.13.4**
 
-Use the pinned stable version for reproducible results.
+Use the pinned stable version for reproducibility.
 
-```bash
+```sh
 flutter pub get
 flutter run
 ```
 
-Run on browser:
+Browser:
 
-```bash
+```sh
 flutter run -d chrome
 ```
 
 Quality checks:
 
-```bash
+```sh
 flutter analyze
 flutter test
 flutter build web --release
@@ -100,166 +88,168 @@ flutter build web --release
 
 Android:
 
-```bash
+```sh
 flutter build apk --debug
 ```
 
 iOS:
 
-```bash
+```sh
 flutter build ios --no-codesign
 ```
 
-Android and iOS builds require their own platform environments, SDK configuration, application identifiers, and signing setup before production deployment.
+Android/iOS builds require the correct native environment, application identifiers, signing configuration, and platform setup before publishing.
 
 
-# Main Features
+---
 
-## Personal Health Measurements
+# What Changed
 
-- Height and weight tracking
-- Metric and imperial unit support
-- BMI calculation
-- Validated user input
-- Interactive sliders and typed values
-
-
-## Progress Journal
-
-- Local daily check-ins
-- Automatic same-day updates
-- Historical records
-- Weight trend visualization
-- CSV data export
-
-
-## Weekly Activity Planner
-
-Users can create realistic movement goals:
-
-- Active days per week
-- Minutes per session
-- Week starting day selection
-- Suggested weekly schedule
+- Three-step height, weight and weekly-plan flow inspired by the supplied reference.
+- Ink background, slate cards, mint actions, lavender accents and bundled Roboto fonts.
+- Metric and imperial units with fine sliders and validated typed entry.
+- Adult BMI calculation with correct category boundaries.
+- Category calculation uses the unrounded BMI value.
+- Locally saved daily check-ins.
+- Same-day updates instead of duplicated records.
+- Weight history tracking.
+- CSV export and data reset.
+- Weekly activity planning with selectable days and minutes.
+- Phone bottom navigation and desktop navigation rail.
+- Responsive two-column overview layout.
+- Loading, storage failure and corrupted data recovery states.
+- CDC/WHO health context and references.
+- GitHub Actions workflow for formatting, analysis, testing and web compilation.
 
 
-## Responsive Experience
+Measurements are constrained to 100–230 cm and 30–250 kg as product input limits, not medical thresholds.
 
-The application supports different layouts:
-
-- Mobile bottom navigation
-- Desktop navigation rail
-- Two-column dashboard layout
-- Responsive Flutter widgets
+BMI is a screening measurement, not a diagnosis, and should not be used as a replacement for professional health assessment.
 
 
-## Privacy Focused
-
-Pulse does not require:
-
-- User accounts
-- Analytics tracking
-- Backend services
-
-All information is stored locally on the user's device.
-
-Storage:
-
-```
-pulse.health.v1
-```
-
-Shared Preferences is used for lightweight local persistence.
-
+---
 
 # Architecture
 
 | Path | Responsibility |
 | --- | --- |
-| `lib/core` | Theme system, reusable components and design tokens |
-| `lib/features/health/domain` | Models, calculations, units and business logic |
-| `lib/features/health/data` | Local JSON persistence layer |
-| `lib/features/health/application` | Riverpod state management and dependency injection |
-| `lib/features/health/presentation` | Screens, widgets and user interactions |
-| `test` | Unit and widget testing |
-| `tool/render_previews.dart` | Screenshot generation tools |
+| `lib/core` | Theme tokens and reusable component styles |
+| `lib/features/health/domain` | Pure Dart models, calculations, units and repository contracts |
+| `lib/features/health/data` | Versioned JSON storage through SharedPreferencesAsync |
+| `lib/features/health/application` | Riverpod dependency injection, hydration and persistence commands |
+| `lib/features/health/presentation` | Onboarding, overview, history, plan, insights and shared widgets |
+| `test` | Domain boundaries, controller behavior and responsive interaction tests |
+| `tool/render_previews.dart` | Reproducible screenshots of Flutter widgets |
 
 
-# Technical Stack
+The repository layer can be replaced without changing the UI.
+
+Immutable state flows from AsyncNotifier to consumers.
+
+Temporary form drafts, selected tabs and dialog states remain local to widgets.
+
+
+---
+
+# Storage and Privacy
+
+Pulse does not use:
+
+- User accounts
+- Analytics tracking
+- Backend services
+
+All information is stored locally.
+
+Storage key:
+
+```
+pulse.health.v1
+```
+
+SharedPreferences provides lightweight local storage and should not be considered a clinical database.
+
+Clearing browser/site data removes web journal data.
+
+Copy CSV exports before resetting application data.
+
+
+---
+
+# Research and Scope
+
+See:
+
+```
+docs/RESEARCH.md
+```
+
+Deferred features:
+
+- Backdated entry editing
+- Custom training weekdays
+- Reminders
+- Encrypted storage
+- RTL localization
+- Wearable device integration
+- Platform file sharing
+
+
+---
+
+# Verification
+
+Completed:
+
+- `flutter analyze` ✅
+- `flutter test` ✅
+- `flutter build web --release` ✅
+- Responsive UI testing ✅
+- Flutter widget screenshot generation ✅
+
+
+Preview images can be regenerated:
+
+```sh
+flutter test tool/render_previews.dart
+```
+
+
+---
+
+# Tech Stack
 
 - Flutter
 - Dart
 - Riverpod 3
 - SharedPreferencesAsync
 - Material Design principles
-- Responsive UI architecture
-- Local JSON data storage
+- Responsive Flutter layouts
+- Local JSON persistence
 
+
+---
 
 # Design System
 
-The interface follows a modern product design approach:
+Pulse uses a modern product-focused visual language:
 
-- Dark premium UI
+- Dark premium interface
 - Ink background
 - Slate surfaces
 - Mint primary actions
 - Lavender highlights
-- Custom typography hierarchy
 - Rounded cards
+- Clear typography hierarchy
 - Minimal interaction design
 
 
-# Research & Scope
+---
 
-The application follows health information guidelines and avoids presenting BMI as a medical diagnosis.
+# License
 
-BMI is used only as a general screening measurement and should not replace professional health assessment.
-
-Additional research decisions and references:
+Font license:
 
 ```
-docs/RESEARCH.md
+assets/fonts/Roboto_LICENSE.txt
 ```
-
-Future improvements:
-
-- Backdated entry editing
-- Custom training schedules
-- Reminders
-- Encrypted storage
-- RTL localization
-- Wearable device integration
-
-
-# Verification
-
-Completed:
-
-✅ Flutter analyze  
-✅ Flutter tests  
-✅ Web release build  
-✅ Responsive UI testing  
-✅ Preview rendering from Flutter widgets  
-
-
-Test coverage includes:
-
-- Domain calculations
-- State management behavior
-- Storage handling
-- Responsive interactions
-
-
-Generate preview images:
-
-```bash
-flutter test tool/render_previews.dart
-```
-
-
-# Project Author
-
-Created and developed by **Arshia**
-
-Flutter Developer focused on building modern, scalable, and user-centered applications.
