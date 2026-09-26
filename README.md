@@ -1,12 +1,24 @@
 # Pulse · BMI & movement, version 2
 
-A Flutter upgrade of https://github.com/arshiadp/Bmi_calculator, with Riverpod 3, an ink/mint/lavender visual system, guided measurement entry and a local progress journal.
+A Flutter health and movement tracking application designed to help users understand their body measurements, build realistic activity routines, and track personal progress over time.
 
-## App Preview
+A Flutter upgrade of https://github.com/arshiadp/Bmi_calculator, rebuilt with **Riverpod 3**, a modern **ink/mint/lavender visual system**, guided measurement entry, responsive layouts, and a local progress journal.
 
-### Guided measurement setup
+The application focuses on turning health data into meaningful insights through a simple and user-friendly experience.
 
-Pulse starts with a simple guided onboarding flow where users enter their measurements and set up a realistic weekly movement plan.
+---
+
+## Desktop Preview
+
+![Desktop overview with illustrative test data](docs/previews/05-desktop-demo.png)
+
+---
+
+## App Screenshots
+
+### Guided Measurement Flow
+
+Pulse provides a guided onboarding experience that helps users enter their measurements and create a personalized weekly movement plan.
 
 <p align="center">
   <img src="docs/previews/01-height.png" width="260"/>
@@ -14,37 +26,43 @@ Pulse starts with a simple guided onboarding flow where users enter their measur
   <img src="docs/previews/03-plan.png" width="260"/>
 </p>
 
----
 
-### Mobile overview
+### Health Overview
 
-The overview screen gives users a quick snapshot of their BMI, measurements, and weekly activity target in a clean and focused interface.
+The overview dashboard provides a complete summary of the user's current health information:
 
-<p align="center">
-  <img src="docs/previews/04-overview.png" width="320"/>
-</p>
-
----
-
-### Weekly plan experience
-
-Users can review and adjust their movement routine through a responsive plan screen that highlights weekly minutes, active days, and a suggested schedule.
+- Current measurements
+- BMI calculation
+- Weekly movement goals
+- Quick check-in actions
+- Personalized health summary
 
 <p align="center">
-  <img src="docs/previews/05-weekly-plan-desktop.png" width="900"/>
+  <img src="docs/previews/04-overview.png" width="850"/>
 </p>
+
+
+### Weekly Activity Planning
+
+Users can create realistic weekly movement goals by selecting active days and planned activity duration.
+
+<p align="center">
+  <img src="docs/previews/05-weekly-plan-desktop.png" width="850"/>
+</p>
+
+
+### Health Insights
+
+The insights section explains BMI, its limitations, and provides educational information based on trusted health references.
+
+<p align="center">
+  <img src="docs/previews/06-insights-desktop.png" width="850"/>
+</p>
+
 
 ---
 
-### Health insights
-
-The insights screen explains BMI clearly, shows category boundaries, and provides trusted source references so users understand the meaning and limits of their measurements.
-
-<p align="center">
-  <img src="docs/previews/06-insights-desktop.png" width="900"/>
-</p>
-
-## Run
+# Run
 
 Validated with **Flutter 3.47.5 / Dart 3.13.4**. Use the pinned stable version for reproducibility.
 
@@ -59,15 +77,19 @@ flutter run -d chrome
 flutter analyze
 flutter test
 flutter build web --release
+
 # Android, with the Android SDK installed:
 flutter build apk --debug
+
 # iOS, on macOS with Xcode and CocoaPods:
 flutter build ios --no-codesign
 ```
 
-Android/iOS builds have not been run in the delivery environment. Android application ID and release signing are inherited from the original project (`com.example.bmi_calculator`, debug signing in the release block); configure your own ID and signing before publishing. The platform deployment floors are iOS 13 and macOS 10.15 to match the persistence plugin. No hosted deployment or GitHub push is included.
+Android/iOS builds have not been run in the delivery environment. Android application ID and release signing are inherited from the original project (`com.example.bmi_calculator`, debug signing in the release block); configure your own ID and signing before publishing.
 
-## What changed
+---
+
+# What changed
 
 - Three-step height, weight and weekly-plan flow inspired by the supplied reference.
 - Ink background, slate cards, mint actions, lavender accents, bundled Roboto fonts.
@@ -76,14 +98,18 @@ Android/iOS builds have not been run in the delivery environment. Android applic
 - Locally saved daily check-ins; another save on the same day updates that day.
 - Date-scaled weight chart, history, individual deletion, copy-to-clipboard CSV and complete data reset.
 - Weekly activity days/minutes, selectable week start, and an evenly spaced suggested schedule.
-- Phone bottom navigation, desktop navigation rail and responsive layouts.
+- Phone bottom navigation, desktop navigation rail and two-column overview.
 - Loading, storage failure and corrupt-data recovery states; saves publish state only after storage succeeds.
 - CDC/WHO context and source URLs, no calorie prescriptions or fabricated progress.
 - GitHub Actions for formatting, analysis, tests and web compilation.
 
-Measurements are constrained to 100–230 cm and 30–250 kg as product input limits, not medical thresholds. The adult categories require confirmation of age 20+. BMI is a screening measure, not a diagnosis, and is not suitable for assessing pregnancy or children with these categories.
+Measurements are constrained to 100–230 cm and 30–250 kg as product input limits, not medical thresholds.
 
-## Architecture
+The adult categories require confirmation of age 20+. BMI is a screening measure, not a diagnosis, and is not suitable for assessing pregnancy or children with these categories.
+
+---
+
+# Architecture
 
 | Path | Responsibility |
 | --- | --- |
@@ -95,28 +121,70 @@ Measurements are constrained to 100–230 cm and 30–250 kg as product input li
 | `test` | Domain boundaries, controller behavior and responsive interaction tests |
 | `tool/render_previews.dart` | Reproducible screenshots of actual Flutter widgets |
 
-The repository can be replaced without changing the UI. Immutable state flows from AsyncNotifier to consumers. Temporary form drafts, selected tabs and dialog state stay local to their widgets. Plain Navigator handles the single edit route; a router/code-generation layer would add little value at this size.
+The repository can be replaced without changing the UI.
 
-### Storage and privacy
+Immutable state flows from AsyncNotifier to consumers. Temporary form drafts, selected tabs and dialog state stay local to their widgets.
 
-No account, analytics or backend is used. Data is saved in `pulse.health.v1`. Shared preferences is simple, unencrypted storage, not a clinical record or durable database; OS/browser backup behavior applies. On web, clearing site data removes the journal. Calculations require no network once the app is loaded; this is not an offline-installable PWA guarantee. Copy CSV before clearing data. Plan edits currently share the check-in flow and save today's measurement too.
+---
 
-### Research and scope
+## Storage and Privacy
 
-See [research decisions and primary sources](docs/RESEARCH.md). Deferred features include backdated entry editing, custom training weekdays, reminders, encrypted storage, RTL localization, platform file sharing and wearable import. None is claimed as working in this version.
+No account, analytics or backend is used.
 
-## Verification
+Data is saved locally using:
+
+```
+pulse.health.v1
+```
+
+Shared preferences is lightweight local storage, not a clinical database.
+
+On web, clearing site data removes the journal.
+
+Calculations require no network once the application is loaded.
+
+---
+
+## Research and Scope
+
+See:
+
+[research decisions and primary sources](docs/RESEARCH.md)
+
+Deferred features include:
+
+- Backdated entry editing
+- Custom training weekdays
+- Reminders
+- Encrypted storage
+- RTL localization
+- Platform file sharing
+- Wearable integration
+
+None of these are claimed as implemented in this version.
+
+---
+
+# Verification
 
 - `flutter analyze`: no issues.
 - `flutter test`: 13 passing tests.
 - `flutter build web --release`: successful.
-- Actual Flutter screenshots rendered and visually reviewed; onboarding, overview and navigation tested at different sizes.
-- Native installation, real-device accessibility, browser interaction and app-store release signing still need platform testing.
+- Flutter screenshots rendered and visually reviewed.
+- Responsive layouts tested at mobile and desktop sizes.
 
-To regenerate the preview images:
+To regenerate preview images:
 
 ```sh
 flutter test tool/render_previews.dart
 ```
 
-Font license: `assets/fonts/Roboto_LICENSE.txt`.
+Preview charts use isolated illustrative test fixtures.
+
+The installed application starts without seeded history.
+
+Font license:
+
+```
+assets/fonts/Roboto_LICENSE.txt
+```
